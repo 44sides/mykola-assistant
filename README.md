@@ -1,7 +1,7 @@
 # mykolaj-helper
 Python server with various features to make online gaming easier
 
-The server serves as a 24/7 helper with a set of features to simplify the SAMP gaming experience for the community, providing services, interfaces, and routine automation. It was deployed on AWS EC2.
+The server serves as a 24/7 helper with a set of features to simplify the SAMP gaming experience for the community, providing services, interfaces, and gaming routine automation. It was deployed on AWS EC2.
 
 http://18.159.52.87:5000/
 
