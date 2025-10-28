@@ -10,7 +10,7 @@ http://18.159.52.87:5000/
 - Monitor - monitors, controls, and logs RakSAMP work that runs the [lua scripts](https://github.com/44sides/lua-collection-samp/tree/main/RakSAMP).
 - Database - stores user profiles with their settings.
 - Telegram assistant - [free Telegram bot](https://github.com/44sides/free-group-telegram-bot), Telegram caller and interface with the server.
-- REST API - server API to update states of users using [lua scripts](https://github.com/44sides/lua-collection-samp/tree/main/SAMP/moonloader).
+- REST API - server API to update states of users using [lua scripts](https://github.com/44sides/lua-collection-samp/blob/main/SAMP/moonloader/lavka_notification.lua).
 - NordVPN - executes users' RakSAMP jobs on the server under a chosen IP.
 
 ## Technologies/libraries 
