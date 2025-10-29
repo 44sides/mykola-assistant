@@ -1,17 +1,17 @@
 # mykolaj-helper
-Python utility server with various features to make online gaming easier
+Python helper server with various features to make online gaming easier
 
-The server serves as a 24/7 helper with a set of features to simplify the SAMP gaming experience for the community, providing services, interfaces, and gaming routine automation. It was deployed on AWS EC2.
+The server serves as a 24/7 helper with a set of features to simplify the SA:MP gaming for the community. It provides services, interfaces, and in-game RakNet SA:MP bots. It was deployed on AWS EC2.
 
 http://18.159.52.87:5000/
 
 ## Features
-- Monitor - monitors, controls, and logs RakSAMP work that runs the [lua scripts](https://github.com/44sides/lua-collection-samp/tree/main/RakSAMP).
-- Scheduler - schedules RakSAMP agents, notifications, and other jobs.
+- Monitor - monitors, controls, and logs RakSAMP bots implemented through [lua scripts](https://github.com/44sides/lua-collection-samp/tree/main/RakSAMP).
+- Scheduler - schedules RakSAMP bots, notifications, and other jobs.
 - Database - stores user profiles with their settings.
 - Telegram assistant - [free Telegram bot](https://github.com/44sides/free-group-telegram-bot), Telegram caller and interface with the server.
 - REST API - server API to update states of users using [lua scripts](https://github.com/44sides/lua-collection-samp/blob/main/SAMP/moonloader/lavka_notification.lua).
-- NordVPN - starts users' RakSAMP agents on the server under a chosen IP.
+- NordVPN - starts users' RakSAMP bots under a chosen IP in a separate netns.
 
 ## Technologies/libraries 
 Schedule, SQLite, Flask, Flasgger, Linux netns, WireGuard, Python-telegram-bot, GPT4Free, Telethon, PyTgCalls, Bbl, RakSAMP Lite
