@@ -1,5 +1,5 @@
-# mykolaj-helper
-Python helper server with various features to make online gaming easier
+# mykola-helper
+Python helper server with various features to make GTA Multiplayer gaming easier
 
 The server serves as a 24/7 helper with a set of features to simplify the SA:MP gaming for the community. It provides services, interfaces, and in-game RakNet SA:MP bots. It was deployed on AWS EC2.
 
@@ -11,7 +11,7 @@ http://18.159.52.87:5000/
 - Database - stores user profiles with their settings.
 - Telegram assistant - [free Telegram bot](https://github.com/44sides/free-group-telegram-bot), Telegram caller and interface with the server.
 - REST API - server API to update states of users using [lua scripts](https://github.com/44sides/lua-collection-samp/blob/main/SAMP/moonloader/lavka_notification.lua).
-- NordVPN - starts users' RakSAMP bots under a chosen IP in a separate netns.
+- NordVPN - starts users' RakSAMP bots under a chosen IP in an isolated netns.
 
 ## Technologies/libraries 
 Schedule, SQLite, Flask, Flasgger, Linux netns, WireGuard, Python-telegram-bot, GPT4Free, Telethon, PyTgCalls, Bbl, RakSAMP Lite
