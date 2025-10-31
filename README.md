@@ -1,17 +1,17 @@
-# mykola-helper
-Python helper server with various features to make GTA Multiplayer gaming easier
+# mykola-assistant
+Python bot server with various features to make GTA Multiplayer gameplay easier
 
-The server serves as a 24/7 helper with a set of features to simplify the SA:MP gaming for the community. It provides services, interfaces, and in-game RakNet SA:MP bots. It was deployed on AWS EC2.
+The server acts as a 24/7 bot assistant, offering a set of features to simplify SA:MP gameplay for the community. It provides interfaces, assistant services, and in-game SA:MP bots powered by the RakNet network engine. It was deployed on AWS EC2.
 
 http://18.159.52.87:5000/
 
 ## Features
 - Monitor - monitors, controls, and logs RakSAMP bots implemented through [lua scripts](https://github.com/44sides/lua-collection-samp/tree/main/RakSAMP).
 - Scheduler - schedules RakSAMP bots, notifications, and other jobs.
-- Database - stores user profiles with their settings.
-- Telegram assistant - [free Telegram bot](https://github.com/44sides/free-group-telegram-bot), Telegram caller and interface with the server.
-- REST API - server API to update states of users using [lua scripts](https://github.com/44sides/lua-collection-samp/blob/main/SAMP/moonloader/lavka_notification.lua).
+- Database - stores user profiles with their bot settings.
+- REST API - server API to update users' bots states through client [lua scripts](https://github.com/44sides/lua-collection-samp/blob/main/SAMP/moonloader/lavka_notification.lua).
 - NordVPN - starts users' RakSAMP bots under a chosen IP in an isolated netns.
+- Telegram assistant - [free Telegram bot](https://github.com/44sides/free-group-telegram-bot), Telegram reminder-caller, and interface with the server.
 
 ## Technologies/libraries 
 Schedule, SQLite, Flask, Flasgger, Linux netns, WireGuard, Python-telegram-bot, GPT4Free, Telethon, PyTgCalls, Bbl, RakSAMP Lite
