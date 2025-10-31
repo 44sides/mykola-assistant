@@ -139,7 +139,7 @@ def root():
 @app_flask.route('/send_message', methods=['POST'])
 def send_message_handler():
     """
-    Send a TG private message via the bot.
+    Sends a TG private message via the bot.
     ---
     parameters:
       - name: body
@@ -164,7 +164,7 @@ def send_message_handler():
 @app_flask.route('/send_stall_message', methods=['POST'])
 def send_lavka_message_handler():
     """
-    Sends a TG private message within a registered profile.
+    Sends a TG private message to a registered user.
     ---
     parameters:
       - name: body
@@ -203,7 +203,7 @@ def send_lavka_message_handler():
 @app_flask.route('/renew_stall', methods=['POST'])
 def renew_lavka_handler():
     """
-    Retrieves profile data from the datbase and starts a TG reminder cycle.
+    Retrieves user's profile data from the database and starts a TG reminder cycle with auto-renewal.
     ---
     parameters:
       - name: body
