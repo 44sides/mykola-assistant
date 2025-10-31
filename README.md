@@ -1,11 +1,11 @@
 # mykola-assistant
-Python bot manager with various features to automate GTA Multiplayer gameplay
+Python bot manager with various services to automate GTA Multiplayer gameplay
 
-The server, acting as a 24/7 assistant, manages bots and offers various features to automate SA:MP gameplay for a community. It provides interfaces, assistant services, and in-game SA:MP bots powered by the RakNet network engine. It was deployed on AWS EC2.
+The server, acting as a 24/7 assistant, manages bots and offers various services to automate SA:MP gameplay for a community. It provides interfaces, assistant services, and in-game SA:MP bots powered by the RakNet network engine. It was deployed on AWS EC2.
 
 http://18.159.52.87:5000/
 
-## Features
+## Components
 - Monitor - monitors, controls, and logs RakSAMP bots implemented through [lua scripts](https://github.com/44sides/lua-collection-samp/tree/main/RakSAMP).
 - Scheduler - schedules RakSAMP bots, notifications, and other jobs.
 - Database - stores user profiles with their bot settings.
