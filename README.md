@@ -1,7 +1,7 @@
 # mykola-assistant
-Python bot manager with various features to make GTA Multiplayer gameplay easier
+Python bot manager with various features to automate GTA Multiplayer gameplay
 
-The server acts as a 24/7 bot assistant, offering a set of features to simplify SA:MP gameplay for the community. It provides interfaces, assistant services, and in-game SA:MP bots powered by the RakNet network engine. It was deployed on AWS EC2.
+The server acts as a 24/7 bot assistant, offering a set of features to automate SA:MP gameplay for the community. It provides interfaces, assistant services, and in-game SA:MP bots powered by the RakNet network engine. It was deployed on AWS EC2.
 
 http://18.159.52.87:5000/
 
