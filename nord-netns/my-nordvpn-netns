@@ -1,0 +1,138 @@
+#!/usr/bin/env bash
+
+# Based on original code from https://github.com/adombeck/nordvpn-netns/blob/main/nordvpn-netns (Adrian Dombeck)
+# Modified by Vladyslav T., 2025
+
+# Create a network namespace with a WireGuard interface and route all
+# traffic through it. The WireGuard interface is configured to use
+# NordVPN.
+#
+# Usage:
+# $0 [up|down]
+# Some configuration is available through environment variables
+# See manual for details
+
+set -euo pipefail
+set -x
+
+# The name to be used for the namespace, link name and config file name.
+WG_NAME=${WG_NAME:-"nordvpn"}
+
+# The WireGuard interface IP address. Defaults to the address which
+# the `nordvpn` command assigns to the interface (10.5.0.2/32).
+WG_IP=${WG_IP:-"10.5.0.2/32"}
+
+# The country code to use for the NordVPN server. Default to Switzerland.
+WG_COUNTRY_CODE=${WG_COUNTRY_CODE:-"CH"}
+
+# The endpoint hostname to use for the NordVPN server.
+WG_HOSTNAME=${WG_HOSTNAME:-}
+
+# A file containing the WireGuard private key.
+WG_PRIVATE_KEY="${CREDENTIALS_DIRECTORY:-/etc/nordvpn-netns}/nordvpn.key"
+
+# The command to run. Either `up` or `down`.
+COMMAND="$1"
+
+get_nordvpn_server() {
+  local url response country_id
+  
+  echo >&2 "Finding recommended NordVPN server for country code ${WG_COUNTRY_CODE}"
+  
+  if [[ -z "$WG_HOSTNAME" ]]; then
+	  # Get the country ID from the country code
+	  url="https://api.nordvpn.com/v1/servers/countries"
+	  country_id=$(curl --silent --show-error "${url}" | jq -r ".[] | select(.code == \"${WG_COUNTRY_CODE}\") | .id")
+  
+	  # Get the recommended server for the country
+	  url="https://api.nordvpn.com/v1/servers/recommendations\
+?filters\[country_id\]=${country_id}\
+&\[servers_technologies\]\[identifier\]=wireguard_udp\
+&\[servers_groups\]\[identifier\]=P2P\
+&limit=1"
+	  response=$(curl --silent --show-error "${url}" | jq -r ".[]")
+  else
+	  url="https://api.nordvpn.com/v1/servers?limit=0"
+	  response=$(curl --silent --show-error "${url}" | jq -r ".[] | select(.hostname == \"${WG_HOSTNAME}\")")
+  fi
+
+  # Print the hostname and public key
+  jq '{
+      hostname,
+      public_key: (
+        .technologies[] |
+        select(.identifier == "wireguard_udp").metadata[] |
+        select(.name == "public_key").value
+      )
+    }' <<< "${response}"
+}
+
+up() {
+    local recommended_server hostname public_key
+
+    # Ensure that the namespace is down before starting
+    down >/dev/null 2>&1 || true
+
+    echo >&2 "Starting namespace ${WG_NAME}"
+
+    # Create the namespace
+    ip netns add "${WG_NAME}"
+
+    # Set the loopback interface up (required for transmission to be
+    # able to bind to the interface)
+    ip -n "${WG_NAME}" link set lo up
+
+    # Create the WireGuard interface
+    ip link add "${WG_NAME}" type wireguard
+
+    recommended_server=$(get_nordvpn_server)
+    hostname=$(jq -r '.hostname' <<< "${recommended_server}")
+    public_key=$(jq -r '.public_key' <<< "${recommended_server}")
+
+    echo >&2 "Connecting to ${hostname}"
+
+    # Assert that the hostname starts with the country code in lowercase.
+    # The double comma is a bashism to convert the variable to lowercase.
+    if [[ ! "${hostname}" =~ ^"${WG_COUNTRY_CODE,,}" ]]; then
+        echo >&2 "Hostname ${hostname} does not start with ${WG_COUNTRY_CODE,,}"
+        exit 1
+    fi
+
+    # Set the WireGuard private key and peer. Do this before moving the
+    # interface into the namespace so that the hostname can be resolved.
+    wg set "${WG_NAME}" \
+       private-key "${WG_PRIVATE_KEY}" \
+       peer "${public_key}" \
+       endpoint "${hostname}:51820" \
+       allowed-ips 0.0.0.0/0,::0/0
+
+    # Move the WireGuard interface into the namespace
+    ip link set "${WG_NAME}" netns "${WG_NAME}"
+
+    # Configure the WireGuard interface
+    ip -n "${WG_NAME}" addr add "${WG_IP}" dev "${WG_NAME}"
+    ip -n "${WG_NAME}" link set mtu 1420 up dev "${WG_NAME}"
+
+    # Route all traffic through the WireGuard interface
+    ip -j -n "${WG_NAME}" route add default dev "${WG_NAME}"
+    echo >&2 "Namespace ${WG_NAME} is up"
+
+    if [[ -v NOTIFY_SOCKET ]]; then
+        echo >&2 "Signalling readiness to systemd via sd_notify"
+        systemd-notify --ready
+    fi
+}
+
+down() {
+    echo >&2 "Stopping namespace ${WG_NAME}"
+    ip -n "${WG_NAME}" link set down dev "${WG_NAME}" || true
+    ip -n "${WG_NAME}" link del dev "${WG_NAME}" || true
+    ip netns del "${WG_NAME}" || true
+    ip link del "${WG_NAME}" || true
+    echo >&2 "Namespace ${WG_NAME} is down"
+}
+
+case "$COMMAND" in
+    up) up "$@" ;;
+    down) down "$@" ;;
+esac
