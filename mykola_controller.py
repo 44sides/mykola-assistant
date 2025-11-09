@@ -939,7 +939,6 @@ async def signup_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             # init env for wine
             subprocess.run(f"sudo -u ubuntu env WINEPREFIX=/home/ubuntu/.wine-nord-{id} wineboot --init".split(), check=True)
         except Exception as e:
-            send_telegram_message('here')
             subprocess.run(f"sudo WG_NAME=nord-{id} bash nord-netns/my-nordvpn-netns down".split(), check=True)
 
     cursor.execute('INSERT INTO users (id, token, vpn_hostname) VALUES (?, ?, ?)', (id, token, vpn_hostname))
